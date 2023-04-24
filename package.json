@@ -1,0 +1,21 @@
+{
+  "name": "atividade-node---mongodb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabdiniz/ATIVIDADE-NODE--MONGODB.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gabdiniz/ATIVIDADE-NODE--MONGODB/issues"
+  },
+  "homepage": "https://github.com/gabdiniz/ATIVIDADE-NODE--MONGODB#readme"
+}
