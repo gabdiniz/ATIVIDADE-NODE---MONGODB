@@ -1,5 +1,6 @@
-const Produto = require("../models/produto");
+const { Produto, schema } = require("../models/produto");
 const { Router } = require("express");
+const multer = require("multer");
 
 const router = Router();
 
@@ -38,25 +39,37 @@ router.get("/produtos/:id", async (req, res) => {
 router.post("/produtos", async (req, res) => {
   try {
     const { nome, descricao, quantidade, preco, desconto, dataDesconto, categoria, imagemProduto } = req.body;
-    const produto = new Produto({ nome, descricao, quantidade, preco, desconto, dataDesconto, categoria, imagemProduto })
-    await produto.save()
-    res.status(201).json(produto);
+    const { error, value } = schema.validate({ nome, descricao, quantidade, preco, desconto, dataDesconto, categoria, imagemProduto })
+    if (error) {
+      res.status(400).json({ error: error.message });
+    }
+    else {
+      const produto = new Produto({ nome, descricao, quantidade, preco, desconto, dataDesconto, categoria, imagemProduto })
+      await produto.save()
+      res.status(201).json(produto);
+    }
   }
   catch (e) {
     console.log(e);
-    res.status(500).json({ message: "Ocorreu um erro." });
-  }  
+    res.status(500).json({ message: "Ocorre um erro." });
+  }
 });
 
 router.put("/produtos/:id", async (req, res) => {
   try {
     const { nome, descricao, quantidade, preco, desconto, dataDesconto, categoria, imagemProduto } = req.body;
-    const produto = await Produto.findByIdAndUpdate(req.params.id, { nome, descricao, quantidade, preco, desconto, dataDesconto, categoria, imagemProduto });
-    if (produto) {
-      res.status(200).json({ message: "Produto editado." });
+    const { error, value } = schema.validate({ nome, descricao, quantidade, preco, desconto, dataDesconto, categoria, imagemProduto })
+    if (error) {
+      res.status(400).json({ error: error.message });
     }
     else {
-      res.status(404).json({ message: "Produto não encontrado." });
+      const produto = await Produto.findByIdAndUpdate(req.params.id, { nome, descricao, quantidade, preco, desconto, dataDesconto, categoria, imagemProduto });
+      if (produto) {
+        res.status(200).json({ message: "Produto editado." });
+      }
+      else {
+        res.status(404).json({ message: "Produto não encontrado." });
+      }
     }
   }
   catch (e) {
