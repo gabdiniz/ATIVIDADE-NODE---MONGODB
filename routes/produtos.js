@@ -1,6 +1,6 @@
 const { Produto, schema } = require("../models/produto");
 const { Router } = require("express");
-const multer = require("multer");
+const uploadImage = require("../middlewares/uploadImage");
 
 const router = Router();
 
@@ -36,9 +36,11 @@ router.get("/produtos/:id", async (req, res) => {
   }
 });
 
-router.post("/produtos", async (req, res) => {
+router.post("/produtos", uploadImage.single('imagemProduto'), async (req, res) => {
   try {
-    const { nome, descricao, quantidade, preco, desconto, dataDesconto, categoria, imagemProduto } = req.body;
+    const { nome, descricao, quantidade, preco, desconto, dataDesconto, categoria } = req.body;
+    const imagemProduto = req.file.path;
+
     const { error, value } = schema.validate({ nome, descricao, quantidade, preco, desconto, dataDesconto, categoria, imagemProduto })
     if (error) {
       res.status(400).json({ error: error.message });
@@ -51,7 +53,7 @@ router.post("/produtos", async (req, res) => {
   }
   catch (e) {
     console.log(e);
-    res.status(500).json({ message: "Ocorre um erro." });
+    res.status(500).json({ message: "Ocorreu um erro." });
   }
 });
 

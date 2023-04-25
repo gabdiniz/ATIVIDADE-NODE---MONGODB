@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 const app = express();
 app.use(express.json());
 
-
 mongoose.connect(process.env.MONGODB_URL);
 const Produto = require("./models/produto");
 
